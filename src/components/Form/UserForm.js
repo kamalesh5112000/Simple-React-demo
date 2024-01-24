@@ -1,9 +1,11 @@
 import React,{useState} from 'react';
-import './UserForm.css'
+import './UserForm.css';
+import ErrorModal from './ErrorModal';
 
 const UserForm=(props)=>{
     const [enteredusername, setEnteredusername] = useState("");
     const [enteredAge, setEnteredAge] = useState("");
+    const [error, setError] = useState();
 
     const UsernameHandler=(e)=>{
         setEnteredusername(e.target.value)
@@ -22,13 +24,38 @@ const UserForm=(props)=>{
             username:enteredusername,
             age:enteredAge
         }
+        if (enteredusername.trim().length === 0 || enteredAge.trim().length === 0) {
+            setError({
+              title: 'Invalid input',
+              message: 'Please enter a valid name and age (non-empty values).',
+            });
+            return;
+          }
+          if (+enteredAge < 1) {
+            setError({
+              title: 'Invalid age',
+              message: 'Please enter a valid age (> 0).',
+            });
+            return;
+          }
         props.onSaveUserData(userdata)
         setEnteredAge("");
         setEnteredusername("")
     }
+    const errorHandler = () => {
+        setError(null);
+      };
 
     return (
-        <form onSubmit={submitHandler}>
+        <div>
+            {error && (
+                <ErrorModal
+                title={error.title}
+                message={error.message}
+                onConfirm={errorHandler}
+                />
+            )}
+            <form onSubmit={submitHandler}>
             <div className="new-user">
             <div className="new-user__control">
                 <label>Username</label>
@@ -46,6 +73,9 @@ const UserForm=(props)=>{
         
 
         </form>
+
+        </div>
+        
     )
 
 }
