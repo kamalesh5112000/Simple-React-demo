@@ -1,9 +1,13 @@
-import React,{useState} from 'react';
+import React,{useState , useRef} from 'react';
 import './UserForm.css';
 import ErrorModal from './ErrorModal';
 import Wrapper from '../Helpers/Wrapper';
 
 const UserForm=(props)=>{
+
+    const collegeInputRef=useRef();
+    
+
     const [enteredusername, setEnteredusername] = useState("");
     const [enteredAge, setEnteredAge] = useState("");
     const [error, setError] = useState();
@@ -20,15 +24,18 @@ const UserForm=(props)=>{
     }
 
     const submitHandler=(e)=>{
+
         e.preventDefault();
+        const enteredcollege=collegeInputRef.current.value;
         const userdata={
             username:enteredusername,
-            age:enteredAge
+            age:enteredAge,
+            college:enteredcollege
         }
-        if (enteredusername.trim().length === 0 || enteredAge.trim().length === 0) {
+        if (enteredusername.trim().length === 0 || enteredAge.trim().length === 0 || enteredcollege.trim().length===0) {
             setError({
               title: 'Invalid input',
-              message: 'Please enter a valid name and age (non-empty values).',
+              message: 'Please enter a valid name , age (non-empty values) and college.',
             });
             return;
           }
@@ -42,6 +49,7 @@ const UserForm=(props)=>{
         props.onSaveUserData(userdata)
         setEnteredAge("");
         setEnteredusername("")
+        collegeInputRef.current.value=''
     }
     const errorHandler = () => {
         setError(null);
@@ -60,11 +68,15 @@ const UserForm=(props)=>{
             <div className="new-user">
             <div className="new-user__control">
                 <label>Username</label>
-                <input type='text' value={enteredusername} onChange={UsernameHandler}></input>
+                <input type='text' value={enteredusername} onChange={UsernameHandler} ></input>
             </div>
             <div className="new-user__control">
                 <label>Age</label>
-                <input type='Number' value={enteredAge} onChange={AgeHandler}></input>
+                <input type='Number' value={enteredAge} onChange={AgeHandler} ></input>
+            </div>
+            <div className="new-user__control">
+                <label>College Name</label>
+                <input type='text'  ref={collegeInputRef}></input>
             </div>
             <div className='new-user__actions'>
             <button type='submit'>Add User</button>
