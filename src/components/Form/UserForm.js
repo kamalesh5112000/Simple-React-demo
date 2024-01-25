@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import './UserForm.css';
 import ErrorModal from './ErrorModal';
+import Wrapper from '../Helpers/Wrapper';
 
 const UserForm=(props)=>{
     const [enteredusername, setEnteredusername] = useState("");
@@ -47,7 +48,7 @@ const UserForm=(props)=>{
       };
 
     return (
-        <div>
+        <Wrapper>
             {error && (
                 <ErrorModal
                 title={error.title}
@@ -74,7 +75,7 @@ const UserForm=(props)=>{
 
         </form>
 
-        </div>
+        </Wrapper>
         
     )
 
